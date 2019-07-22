@@ -15,7 +15,7 @@ prototype app for searching using elasticsearch
  
 # Download data
  
-wget -w 2 -m -H "http://www.gutenberg.org/robot/harvest?filetypes[]=txt&langs[]=en"
+`wget -w 2 -m -H "http://www.gutenberg.org/robot/harvest?filetypes[]=txt&langs[]=en"`
 
 Extract these files into a `books/` directory in your project.
  
