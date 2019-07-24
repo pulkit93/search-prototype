@@ -1,4 +1,4 @@
-# Use Node v8.9.0 LTS
+# Use Python v3.7
 FROM python:3.7
 
 # Setup app working directory

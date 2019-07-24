@@ -7,10 +7,10 @@ import os
 from setuptools import find_packages, setup
 
 # Package meta-data.
-NAME = 'guttenberg-search'
+NAME = 'search-prototype'
 DESCRIPTION = 'Source code for ElasticSearch using 100 classic open source books.'
-URL = 'https://github.com/me/myproject'
-EMAIL = 'me@example.com'
+URL = 'https://github.mskcc.org/dataproducts/search-prototype.git'
+EMAIL = 'jainp1@mskcc.org'
 AUTHOR = 'Awesome Soul'
 REQUIRES_PYTHON = '>=3.7.0'
 VERSION = '0.0.1'
