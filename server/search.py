@@ -1,8 +1,13 @@
-from server.connection import client, _index
+from server.connection import es_client, INDEX
 
 
-# Query ES index for the provided term
 def query_term(term, offset=0):
+    """
+    * Query ES index for the provided term
+    :param term:
+    :param offset:
+    :return:
+    """
     body = {
         'from': offset,
         'query': {
@@ -22,13 +27,19 @@ def query_term(term, offset=0):
         }
     }
 
-    return client.search(_index, body)
+    return es_client().search(INDEX, body)
 
 
-# Get the specified range of paragraphs from a book
 def get_paragraphs(book_title, start_location, end_location):
+    """
+    * Get the specified range of paragraphs from a book
+    :param book_title:
+    :param start_location:
+    :param end_location:
+    :return:
+    """
 
-    filter = [
+    search_filter = [
         {'term': {'title': book_title}},
         {'range': {'location': {'gte': start_location, 'lte': end_location}}}
     ]
@@ -36,7 +47,7 @@ def get_paragraphs(book_title, start_location, end_location):
     body = {
         'size': end_location - start_location,
         'sort': {'location': 'asc'},
-        'query': {'bool': {'filter': filter}}
+        'query': {'bool': {'filter': search_filter}}
     }
 
-    return client.search(_index, body)
+    return es_client().search(INDEX, body)

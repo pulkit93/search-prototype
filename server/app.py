@@ -31,7 +31,7 @@ def _validate_paragraphs(book_title, start, end):
 
     if book_title and isinstance(book_title, str) and len(book_title) <= 256:
         if isinstance(start, int) and start >= 0:
-            if isinstance(end, int) and end>start:
+            if isinstance(end, int) and end > start:
                 return None
 
     return BadRequest()
@@ -73,15 +73,17 @@ def paragraphs():
 @app.after_request
 def after_request(response):
     timestamp = strftime('[%Y-%b-%d %H:%M]')
-    app.logger.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
+    app.logger.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method,
+                     request.scheme, request.full_path, response.status)
     return response
 
 
 @app.errorhandler(Exception)
 def exceptions(err):
-    tb = traceback.format_exc()
+    trace_back = traceback.format_exc()
     timestamp = strftime('[%Y-%b-%d %H:%M]')
-    app.logger.error('%s %s %s %s %s 5xx INTERNAL SERVER ERROR\n%s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, tb)
+    app.logger.error('%s %s %s %s %s 5xx INTERNAL SERVER ERROR\n%s', timestamp, request.remote_addr,
+                     request.method, request.scheme, request.full_path, trace_back)
     return err
 
 
@@ -95,5 +97,5 @@ if __name__ == '__main__':
         logger.setLevel(logging.ERROR)
         logger.addHandler(handler)
         app.run(host, port)
-    except Exception as e:
-        print(e)
+    except Exception as exc:
+        print(exc)

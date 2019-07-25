@@ -3,15 +3,25 @@ import os
 from elasticsearch import Elasticsearch
 
 # Core ES variables for this project
-_index = 'library'
-_type = 'novel'
-_port = 9200
-_host = os.getenv('ES_HOST', 'localhost')
+INDEX = 'library'
+TYPE = 'novel'
+PORT = 9200
+HOST = os.getenv('ES_HOST', 'localhost')
 
-client = Elasticsearch([_host], port=_port)
+
+def es_client():
+    """
+
+    :return: elasticsearch client
+    """
+    return Elasticsearch([HOST], port=PORT)
 
 
 def check_connection():
+    """
+    * Check connection to elasticsearch
+    :return:
+    """
 
     is_connected = False
 
@@ -21,7 +31,7 @@ def check_connection():
 
         try:
 
-            health = client.cluster.health()
+            health = es_client().cluster.health()
             print(health)
             is_connected = True
 
@@ -30,18 +40,23 @@ def check_connection():
             print('Connection Failed, Retrying...', err)
 
 
-# Clear the index, recreate it, and add mappings
 def reset_index():
+    """
+    * Clear the index, recreate it, and add mappings
+    :return:
+    """
+    if es_client().indices.exists(INDEX):
+        es_client().indices.delete(INDEX)
 
-    if client.indices.exists(_index):
-        client.indices.delete(_index)
-
-    client.indices.create(_index)
+    es_client().indices.create(INDEX)
     _put_book_mapping()
 
 
-# Add book section schema mapping to ES
 def _put_book_mapping():
+    """
+    * Add book section schema mapping to ES
+    :return:
+    """
     schema = {
         'title': {'type': 'keyword'},
         'author': {'type': 'keyword'},
@@ -51,4 +66,4 @@ def _put_book_mapping():
 
     body = {'properties': schema}
 
-    return client.indices.put_mapping(index=_index, doc_type=_type, body=body)
+    es_client().indices.put_mapping(index=INDEX, doc_type=TYPE, body=body)
