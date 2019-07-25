@@ -42,6 +42,9 @@ def search():
     """
     * GET /search
     * Search for a term in the libraryDefault route to return a simple message
+    * Query Params -
+    *   term: string under 60 characters
+    *   offset: positive integer
     """
     term = request.args.get('term', None)
     offset = request.args.get('offset', 0)
@@ -60,11 +63,11 @@ def paragraphs():
     *   end: positive integer greater than start
     :return:
     """
-    book_title = request.args.get('book_title', None)
+    book_title = request.args.get('bookTitle', None)
     start = request.args.get('start', 0)
     end = request.args.get('end', 10)
-    _raise_if(_validate(book_title, int(start), int(end)))
-    request.body = search.getParagraphs(book_title, int(start), int(end))
+    _raise_if(_validate_paragraphs(book_title, int(start), int(end)))
+    return es_search.get_paragraphs(book_title, int(start), int(end))
 
 
 @app.after_request

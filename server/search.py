@@ -36,7 +36,7 @@ def get_paragraphs(book_title, start_location, end_location):
     body = {
         'size': end_location - start_location,
         'sort': {'location': 'asc'},
-        'query': {bool: {filter}}
+        'query': {'bool': {'filter': filter}}
     }
 
     return client.search(_index, body)
