@@ -18,25 +18,53 @@ def _raise_if(exc):
         raise exc
 
 
-def _validate(term, offset):
+def _validate_search(term, offset):
 
-        if term and isinstance(term, str) and len(term) <= 60:
-            if isinstance(offset, int) and offset >= 0:
+    if term and isinstance(term, str) and len(term) <= 60:
+        if isinstance(offset, int) and offset >= 0:
+            return None
+
+    return BadRequest()
+
+
+def _validate_paragraphs(book_title, start, end):
+
+    if book_title and isinstance(book_title, str) and len(book_title) <= 256:
+        if isinstance(start, int) and start >= 0:
+            if isinstance(end, int) and end>start:
                 return None
 
-        return BadRequest()
+    return BadRequest()
 
 
 @app.route('/search', methods=['GET'])
 def search():
     """
-    GET /search
-    Search for a term in the libraryDefault route to return a simple message
+    * GET /search
+    * Search for a term in the libraryDefault route to return a simple message
     """
     term = request.args.get('term', None)
     offset = request.args.get('offset', 0)
-    _raise_if(_validate(term, offset))
-    return es_search.query_term(term, offset)
+    _raise_if(_validate_search(term, int(offset)))
+    return es_search.query_term(term, int(offset))
+
+
+@app.route('/paragraphs', methods=['GET'])
+def paragraphs():
+    """"
+    * GET /paragraphs
+    * Get a range of paragraphs from the specified book
+    * Query Params -
+    *   book_title: string under 256 characters
+    *   start: positive integer
+    *   end: positive integer greater than start
+    :return:
+    """
+    book_title = request.args.get('book_title', None)
+    start = request.args.get('start', 0)
+    end = request.args.get('end', 10)
+    _raise_if(_validate(book_title, int(start), int(end)))
+    request.body = search.getParagraphs(book_title, int(start), int(end))
 
 
 @app.after_request

@@ -1,7 +1,7 @@
 import glob
 import os
 import re
-import server.connection as es_connection
+import connection as es_connection
 from elasticsearch import helpers
 
 
@@ -13,9 +13,8 @@ def parse_book_file(file_path):
     book.close()
 
     # Find book title and author
-    # title = ' '.join(re.findall('^Title:(.+)\n(.+)$', book_text, re.M)[0])
-    title = re.findall(r'Title:\s(.*?)\s*(?=\n\n)', book_text, re.S)
-    author_match = re.findall(r'Author:\s(.*?)\s*(?=\n\n)', book_text, re.S)
+    title = ''.join(re.findall(r'Title:\s(.*?)\s*(?=\n\n)', book_text, re.S)[0].split('\n'))
+    author_match = re.findall(r'Author:\s(.*?)\s*(?=\n)', book_text, re.S)
     author = 'Unknown Author' if (not author_match or author_match[0].strip() == '') else author_match[0]
 
     print('Reading Book - {0} By {1}'.format(title, author))

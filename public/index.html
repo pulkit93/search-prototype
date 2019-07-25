@@ -48,7 +48,39 @@
         <button class="mui-btn mui-btn--flat" v-on:click="nextResultsPage()">Next Page</button>
     </div>
 
-    <!-- INSERT BOOK MODAL HERE -->
+    <!-- Book Paragraphs Modal Window -->
+    <div v-if="selectedParagraph" ref="bookModal" class="book-modal">
+      <div class="paragraphs-container">
+        <!-- Book Section Metadata -->
+        <div class="title-row">
+          <div class="mui--text-display2 all-caps">{{ selectedParagraph._source.title }}</div>
+          <div class="mui--text-display1">{{ selectedParagraph._source.author }}</div>
+        </div>
+        <br>
+        <div class="mui-divider"></div>
+        <div class="mui--text-subhead locations-label">Locations {{ bookOffset - 5 }} to {{ bookOffset + 5 }}</div>
+        <div class="mui-divider"></div>
+        <br>
+
+        <!-- Book Paragraphs -->
+        <div v-for="paragraph in paragraphs">
+          <div v-if="paragraph._source.location === selectedParagraph._source.location" class="mui--text-body2">
+            <strong>{{ paragraph._source.text }}</strong>
+          </div>
+          <div v-else class="mui--text-body1">
+            {{ paragraph._source.text }}
+          </div>
+          <br>
+        </div>
+      </div>
+
+      <!-- Book Pagination Footer -->
+      <div class="modal-footer">
+        <button class="mui-btn mui-btn--flat" v-on:click="prevBookPage()">Prev Page</button>
+        <button class="mui-btn mui-btn--flat" v-on:click="closeBookModal()">Close</button>
+        <button class="mui-btn mui-btn--flat" v-on:click="nextBookPage()">Next Page</button>
+      </div>
+    </div>
 </div>
 <script src="https://cdn.muicss.com/mui-0.9.28/js/mui.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.min.js"></script>
