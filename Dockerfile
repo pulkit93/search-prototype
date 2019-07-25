@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir -r base.txt
 COPY . .
 
 # Start app
-CMD ["gunicorn", "--config=python:gunicorn-config", "server.app:app"]
+CMD ["gunicorn", "--config=python:gunicorn_config", "server.app:app"]
