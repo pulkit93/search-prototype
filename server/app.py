@@ -90,9 +90,10 @@ if __name__ == '__main__':
     try:
         handler = RotatingFileHandler('app.log', maxBytes=100000, backupCount=3)
         port = os.getenv('PORT', 3000)
+        host = os.getenv('HOST', '127.0.0.1')
         logger = logging.getLogger('tdm')
         logger.setLevel(logging.ERROR)
         logger.addHandler(handler)
-        app.run('0.0.0.0', port)
+        app.run(host, port)
     except Exception as e:
         print(e)
