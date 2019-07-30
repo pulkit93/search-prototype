@@ -70,8 +70,8 @@ def insert_book_data(title, author, paragraphs):
         bulk_ops[-1].update({
             'author': author,
             'title': title,
-            'location': i,
-            'text': paragraphs[i]
+            'location': i[0],
+            'text': i[1]
         })
 
     # Insert remainder of bulk ops array
